@@ -1,0 +1,231 @@
+\documentclass[11pt]{article}
+
+\usepackage{forloop}
+
+\usepackage{calc}
+\usepackage{pict2e}
+\usepackage{xcolor}
+
+\usepackage{noweb}
+
+\begin{document}
+
+\section{Problem Statement}
+
+\subsection{Random number generator}
+
+There is an ideal random number generator, which given a positive integer M can generate any real number between 0 to M, and probability density function is uniform in [0, M].
+
+Suppose we generate 2 numbers x and y via the generator by giving it 2 positive integers A and B, what's the probability that x + y is less than C? where C is a positive integer.
+
+\subsubsection{Input Format}
+
+The first line of the input is an integer N, the number of test cases.
+
+N lines follow. Each line contains 3 positive integers A, B and C.
+
+\subsubsection{Constraints}
+
+All the integers are no larger than 10000.
+
+\subsubsection{Output Format}
+
+For each output, output a fraction that indicates the probability. The greatest common divisor of each pair of numerator and denominator should be 1.
+
+\subsubsection{Sample Input}
+
+\begin{verbatim}
+3
+1 1 1
+1 1 2
+1 1 3
+\end{verbatim}
+
+\subsubsection{Sample Output}
+
+\begin{verbatim}
+1/2
+1/1
+1/1
+\end{verbatim}
+
+\def\width{ 3 }
+\def\hauteur{ 4 }
+
+\begin{center}
+  \setlength{\unitlength}{.4in}
+  \begin{picture}(3,4)%
+    \newcounter{numberi}
+    \newcounter{numberj}
+    \newcounter{sumdf}
+    {\color{gray!20}\polygon*(0,0)(0,3)(3,0)}
+    \forloop{numberi}{0}{\value{numberi} < 3}{
+      \forloop{numberj}{0}{\value{numberj} < 3}{
+	\setcounter{sumdf}{\value{numberi}+\value{numberj}}
+    \ifnum\value{sumdf}<0
+      \setlength\fboxsep{0pt}
+      \put(\value{numberi},\value{numberj})%
+			      {\colorbox{gray!20}%
+			      {\makebox(1,1){\arabic{sumdf}}}}%
+    \else
+      \put(\value{numberi},\value{numberj})%
+			      {\makebox(1,1){\arabic{sumdf}}}%
+    \fi
+      }
+    }
+    \multiput(0,0)(1,0){4}{\line(0,1){3}}%
+    \multiput(0,0)(0,1){4}{\line(1,0){3}}%
+    \multiput(3,2)(0,1){1}{\line(-1,1){1}}%
+    \multiput(3,1)(0,1){1}{\line(-1,1){2}}%
+    \multiput(3,0)(0,1){1}{\line(-1,1){3}}%
+    \multiput(2,0)(0,1){1}{\line(-1,1){2}}%
+    \multiput(1,0)(0,1){1}{\line(-1,1){1}}%
+    \put(0,0){\makebox(1,1){0}}%
+  \end{picture}
+\end{center}
+
+For the $3, 4, 5$ case you have the following solutions:
+$\frac{1}{30}$
+$\frac{2}{15}$
+$\frac{3}{10}$
+$\frac{1}{2}$
+$\frac{7}{10}$
+$\frac{13}{15}$
+$\frac{29}{30}$
+$\frac{1}{1}$.
+
+\begin{center}
+  \setlength{\unitlength}{.4in}
+  \begin{picture}(4,6)%
+%    \newcounter{numberi}
+%    \newcounter{numberj}
+%    \newcounter{sumdf}
+    {\setlength{\fboxsep}{0pt}
+     \setlength{\fboxrule}{0pt}
+     {\color{green!10}\polygon*(1,6)(4,6)(4,3)}
+     {\color{blue!10}\polygon*(1,4)(1,6)(4,3)(4,1)}
+     {\color{gray!20}\polygon*(1,1)(1,4)(4,1)}
+    }
+    \multiput(1,1)(1,0){4}{\line(0,1){5}}% wide
+    \multiput(1,1)(0,1){6}{\line(1,0){3}}% tall
+    \multiput(4,5)(0,1){1}{\line(-1,1){1}}%
+    \multiput(4,4)(0,1){1}{\line(-1,1){2}}%
+    \multiput(4,3)(0,1){1}{\line(-1,1){3}}%
+    \multiput(4,2)(0,1){1}{\line(-1,1){3}}%
+    \multiput(4,1)(0,1){1}{\line(-1,1){3}}%
+    \multiput(3,1)(0,1){1}{\line(-1,1){2}}%
+    \multiput(2,1)(0,1){1}{\line(-1,1){1}}%
+    \put(0.25,0.25){\makebox(1,1){0}}%
+    \put(0.25,1.50){\makebox(1,1){1}}%
+    \put(0.25,2.50){\makebox(1,1){2}}%
+    \put(0.25,3.50){\makebox(1,1){3}}%
+    \put(0.25,4.50){\makebox(1,1){4}}%
+    \put(1.50,0.20){\makebox(1,1){1}}%
+    \put(0.25,5.75){\makebox(1,1){5}}%
+    \put(1.50,5.90){\makebox(1,1){6}}%
+    \put(2.50,5.90){\makebox(1,1){7}}%
+    \put(2.50,0.20){\makebox(1,1){2}}%
+    \put(3.70,0.25){\makebox(1,1){3}}%
+    \put(3.75,1.50){\makebox(1,1){4}}%
+    \put(3.75,2.50){\makebox(1,1){5}}%
+    \put(3.75,3.50){\makebox(1,1){6}}%
+    \put(3.75,4.50){\makebox(1,1){7}}%
+    \put(3.75,5.75){\makebox(1,1){8}}%
+  \end{picture}
+\end{center}
+
+
+\[ r = \left\{ \begin{array}{ll}
+     1               & \mbox{if $a + b \le c$}; \\
+     \frac{c^2}{2ab} & \mbox{if $c \le a$}; \\
+     \frac{a^2 + 2(ac - a^2))}{2ab} & \mbox{if $c < b \land c > a$}; \\
+     \frac{2 * a * b - (a + b - c) * (a + b - c)}{2ab} & \mbox{if $c > b \land c \le a + b$}.%
+ \end{array} \right. \]
+
+
+<<algo>>=
+int numerator = 2 * a * b;
+if (a + b <= c) {
+fprintf(stderr, "1 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
+  numerator = 2 * a * b;
+} else
+if (c < a) {
+fprintf(stderr, "2 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
+  numerator = c * c;
+} else
+if (c < b) {
+fprintf(stderr, "3 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
+  numerator = a * a + 2 * a * (c - a);
+} else {  
+fprintf(stderr, "4 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
+  numerator = 2 * a * b - (a + b - c) * (a + b - c);
+}
+
+output_reduced(numerator, 2 * a * b);
+
+@
+
+<<*>>=
+
+#include <cstdio>
+
+using namespace std;
+
+<<gcd>>
+
+<<output reduced fraction>>
+
+@
+
+<<error checking>>=
+if (a > b) {
+  a ^= b;
+  b ^= a;
+}
+if (a * b * c == 0) {
+  fprintf(stderr, "a, b and c must be positive integers!\n");
+  return(-1);
+}
+@
+
+<<gcd>>=
+unsigned int gcd(unsigned int u, unsigned int v) {
+  while ( v != 0) {
+    unsigned int r = u % v;
+    u = v;
+    v = r;
+  }
+  return u;
+}
+@
+
+<<output reduced fraction>>=
+
+int output_reduced(int n, int d)
+{
+  unsigned int div = gcd(n,d);
+  int x = n / div;
+  int y = d / div;
+  printf("%d/%d\n", x, y);
+}
+
+#define min(a, b) (a < b ? a : b)
+#define max(a, b) (a > b ? a : b)
+
+main()
+{
+  int lines;
+  if (scanf( "%d\n", &lines)) {
+    for (int i = 0; i < lines; i++) {
+      unsigned int a, b, c;
+      if (scanf( "%u %u %u\n", &a, &b, &c)) {
+        <<error checking>>
+        <<algo>>
+      }
+    }
+  }
+  return 0;
+}
+@
+
+\end{document}
