@@ -20,6 +20,8 @@ Suppose we generate 2 numbers x and y via the generator by giving it 2 positive 
 
 \subsubsection{Input Format}
 
+\label{InFormat}
+
 The first line of the input is an integer N, the number of test cases.
 
 N lines follow. Each line contains 3 positive integers A, B and C.
@@ -49,8 +51,10 @@ For each output, output a fraction that indicates the probability. The greatest 
 1/1
 \end{verbatim}
 
-\def\width{ 3 }
-\def\hauteur{ 4 }
+\section{The Solution}
+
+For the case, where $a$, $b$ and $c$ are equal, we see that the
+answer is $1/2$.
 
 \begin{center}
   \setlength{\unitlength}{.4in}
@@ -136,28 +140,24 @@ $\frac{1}{1}$.
 
 
 \[ r = \left\{ \begin{array}{ll}
-     1               & \mbox{if $a + b \le c$}; \\
      \frac{c^2}{2ab} & \mbox{if $c \le a$}; \\
-     \frac{a^2 + 2(ac - a^2))}{2ab} & \mbox{if $c < b \land c > a$}; \\
-     \frac{2 * a * b - (a + b - c) * (a + b - c)}{2ab} & \mbox{if $c > b \land c \le a + b$}.%
+     \frac{2ac - a^2}{2ab} & \mbox{if $c \ge a \land c \le b$}; \\
+     \frac{2(ac+bc)-a^2-b^2-c^2}{2ab} & \mbox{if $c \ge b \land c \le a + b$}\\
+     1            & \mbox{if $c \ge a + b$}.%
  \end{array} \right. \]
 
 
 <<algo>>=
 int numerator = 2 * a * b;
 if (a + b <= c) {
-fprintf(stderr, "1 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
   numerator = 2 * a * b;
 } else
 if (c < a) {
-fprintf(stderr, "2 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
   numerator = c * c;
 } else
 if (c < b) {
-fprintf(stderr, "3 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
-  numerator = a * a + 2 * a * (c - a);
+  numerator = 2 * a * c - a * a;
 } else {  
-fprintf(stderr, "4 %u %u %u %u/%u\n", a, b, c , c * c, a * b);
   numerator = 2 * a * b - (a + b - c) * (a + b - c);
 }
 
@@ -165,28 +165,26 @@ output_reduced(numerator, 2 * a * b);
 
 @
 
-<<*>>=
+There are 2 conditions that we must test on input.  We must make sure that $a$, $b$ and $c$ are positive integers.
 
-#include <cstdio>
-
-using namespace std;
-
-<<gcd>>
-
-<<output reduced fraction>>
-
-@
-
-<<error checking>>=
-if (a > b) {
-  a ^= b;
-  b ^= a;
-}
+<<input checking>>=
 if (a * b * c == 0) {
   fprintf(stderr, "a, b and c must be positive integers!\n");
   return(-1);
 }
 @
+
+And we must make sure that $a$ is less than $b$.  We do this by swapping $a$ with $b$ if it is not the case.
+
+<<input checking>>=
+if (a > b) {
+  a ^= b;
+  b ^= a;
+  a ^= b;
+}
+@
+
+The output is a reduced normalized fraction.  We need a \emph{greatest common divisor} funtions to reduce the fraction.
 
 <<gcd>>=
 unsigned int gcd(unsigned int u, unsigned int v) {
@@ -199,18 +197,22 @@ unsigned int gcd(unsigned int u, unsigned int v) {
 }
 @
 
+Then we have a procedure prints a fraction to standard output.
+
 <<output reduced fraction>>=
 
-int output_reduced(int n, int d)
+void output_reduced(int n, int d)
 {
   unsigned int div = gcd(n,d);
   int x = n / div;
   int y = d / div;
   printf("%d/%d\n", x, y);
 }
+@
 
-#define min(a, b) (a < b ? a : b)
-#define max(a, b) (a > b ? a : b)
+The \emph{main}, entry point, function reads the input as described in section \ref{InFormat}.
+
+<<main function>>=
 
 main()
 {
@@ -219,7 +221,7 @@ main()
     for (int i = 0; i < lines; i++) {
       unsigned int a, b, c;
       if (scanf( "%u %u %u\n", &a, &b, &c)) {
-        <<error checking>>
+        <<input checking>>
         <<algo>>
       }
     }
@@ -227,5 +229,20 @@ main()
   return 0;
 }
 @
+
+<<*>>=
+
+#include <cstdio>
+
+using namespace std;
+
+<<gcd>>
+
+<<output reduced fraction>>
+
+<<main function>>
+
+@
+
 
 \end{document}
